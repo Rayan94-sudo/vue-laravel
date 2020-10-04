@@ -36,6 +36,13 @@
             </div>
           </div>
         </div>
+        <div class="table-row">
+          <div class="table-data">
+            <button v-on:click="addC_()" style="width: 200px !important">
+              Add Client
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -50,34 +57,42 @@ export default {
     };
   },
   mounted() {
-    let that = this;
-    instance
-      .get("http://127.0.0.1:8000/api/admin/clients")
-      .then(({ data }) => {
-        // console.log(data);
-        that.items = data.data;
-        that.items.forEach((element) => {
-          if (element.role === "admin") {
-            console.log(element.role);
-            that.items.splice(that.items.indexOf(element), 1);
-          }
-        });
-        console.log(that.items);
-      })
-      .catch((err) => console.error(err));
-    console.log(localStorage.getItem("token"));
+    this.showC();
   },
   methods: {
+    // show clients
+    showC() {
+      let that = this;
+      instance
+        .get("http://127.0.0.1:8000/api/admin/clients")
+        .then(({ data }) => {
+          // console.log(data);
+          that.items = data.data;
+          that.items.forEach((element) => {
+            if (element.role === "admin") {
+              //console.log(element.role);
+              that.items.splice(that.items.indexOf(element), 1);
+            }
+          });
+          console.log(that.items);
+        })
+        .catch((err) => console.error(err));
+      //console.log(localStorage.getItem("token"));
+    },
+
+    // delete client
     deleteC(id, indexid) {
       let that = this;
-      console.log(indexid);
+      //console.log(indexid);
       instance
         .delete("http://127.0.0.1:8000/api/admin/client/delete/" + id)
         .then((response) => {
           that.items.splice(indexid, 1);
-          console.log(that.items);
+          // console.log(that.items);
         });
     },
+
+    //navigation to edit client page
     editC(id) {
       console.log(id);
       this.$router.push({
@@ -85,9 +100,17 @@ export default {
         params: { pid: id },
       });
     },
+
+    //navigation to add client page
+    addC_() {
+      this.$router.push({
+        path: "/admin/addclient/",
+      });
+    },
   },
 };
 </script>
+
 <style scoped lang="scss">
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700");
 

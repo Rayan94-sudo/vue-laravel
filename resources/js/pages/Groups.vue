@@ -19,7 +19,7 @@
           <div class="table-row" v-for="(item, index) in items">
             <div class="table-data">{{ item.name }}</div>
             <div class="table-data">
-              <button v-on:click="viewG(item.id)">view & edit</button>
+              <button v-on:click="editG(item.id)">view & edit</button>
             </div>
             <div class="table-data">
               <button v-on:click="deleteG(item.id, index)">Delete</button>
@@ -27,7 +27,7 @@
           </div>
           <div class="table-row">
             <div class="table-data">
-              <button v-on:click="addGroup" style="width: 200px !important">
+              <button v-on:click="addG" style="width: 200px !important">
                 Add Group
               </button>
             </div>
@@ -48,17 +48,23 @@ export default {
     };
   },
   mounted() {
-    let that = this;
-    instance
-      .get("http://127.0.0.1:8000/api/admin/groups")
-      .then(({ data }) => {
-        console.log(data);
-        that.items = data.data;
-        // console.log(that.items);
-      })
-      .catch((err) => console.error(err));
+    this.showG();
   },
   methods: {
+    // show groups
+    showG() {
+      let that = this;
+      instance
+        .get("http://127.0.0.1:8000/api/admin/groups")
+        .then(({ data }) => {
+          console.log(data);
+          that.items = data.data;
+          // console.log(that.items);
+        })
+        .catch((err) => console.error(err));
+    },
+
+    // delete group
     deleteG(id, indexi) {
       let that = this;
       instance
@@ -90,14 +96,18 @@ export default {
             });
         });
     },
-    viewG(id) {
+
+    //navigation to edit group page
+    editG(id) {
       console.log(id);
       this.$router.push({
         path: "/admin/editgroup/" + id,
         params: { pid: id },
       });
     },
-    addGroup() {
+
+    //navigation to add group page
+    addG() {
       this.$router.push({
         path: "/admin/addgroup",
       });

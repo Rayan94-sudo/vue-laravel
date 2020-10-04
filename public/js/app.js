@@ -2013,7 +2013,10 @@ __webpack_require__.r(__webpack_exports__);
         role: this.role,
         active: this.active
       }).then(function (response) {
-        console.log("added"); // window.location.href = "/admin/clients";
+        console.log("added");
+        that.$router.push({
+          path: "/admin/Clients"
+        });
       });
     }
   }
@@ -2062,23 +2065,28 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    var that = this;
-    _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("http://127.0.0.1:8000/api/admin/clients").then(function (_ref) {
-      var data = _ref.data;
-      // console.log(data);
-      that.items = data.data;
-      that.items.forEach(function (element) {
-        if (element.role === "admin") {
-          console.log(element.role);
-          that.items.splice(that.items.indexOf(element), 1);
-        }
-      });
-      console.log(that.items);
-    })["catch"](function (err) {
-      return console.error(err);
-    });
+    this.showClients;
   },
   methods: {
+    // show all clients in select options
+    showClients: function showClients() {
+      var that = this;
+      _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("http://127.0.0.1:8000/api/admin/clients").then(function (_ref) {
+        var data = _ref.data;
+        // console.log(data);
+        that.items = data.data;
+        that.items.forEach(function (element) {
+          if (element.role === "admin") {
+            console.log(element.role);
+            that.items.splice(that.items.indexOf(element), 1);
+          }
+        });
+        console.log(that.items);
+      })["catch"](function (err) {
+        return console.error(err);
+      });
+    },
+    // create a group
     save: function save() {
       var that = this;
       _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].post("http://127.0.0.1:8000/api/admin/group/create", {
@@ -2087,18 +2095,23 @@ __webpack_require__.r(__webpack_exports__);
         that.id_group = response.data.data.id;
         console.log(that.id_group);
         that.user_ids.forEach(function (element) {
-          axios.post("http://127.0.0.1:8000/api/admin/usergroup/create", {
-            id_group: that.id_group,
-            id_user: element
-          }).then(function (response) {
-            console.log("added ids");
-          });
+          addCG(element);
         });
       });
       that.$router.push({
         path: "/admin/groups"
       });
     },
+    // add clients to group
+    addCG: function addCG(element) {
+      axios.post("http://127.0.0.1:8000/api/admin/usergroup/create", {
+        id_group: that.id_group,
+        id_user: element
+      }).then(function (response) {
+        console.log("added ids");
+      });
+    },
+    // add id client to array
     addClient: function addClient() {
       var _this = this;
 
@@ -2150,18 +2163,23 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    console.log(this.$route.params.id);
-    var that = this;
-    _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("http://127.0.0.1:8000/api/admin/client/" + this.$route.params.id).then(function (_ref) {
-      var data = _ref.data;
-      console.log(data);
-      that.items = data.data;
-      console.log(that.items);
-    })["catch"](function (err) {
-      return console.error(err);
-    });
+    this.viewC();
   },
   methods: {
+    // view client to be edit
+    viewC: function viewC() {
+      // console.log(this.$route.params.id);
+      var that = this;
+      _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("http://127.0.0.1:8000/api/admin/client/" + this.$route.params.id).then(function (_ref) {
+        var data = _ref.data;
+        console.log(data);
+        that.items = data.data;
+        console.log(that.items);
+      })["catch"](function (err) {
+        return console.error(err);
+      });
+    },
+    //save updated fields
     save: function save() {
       var that = this;
       _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].post("http://127.0.0.1:8000/api/admin/client/update/" + that.items.id, {
@@ -2244,23 +2262,30 @@ __webpack_require__.r(__webpack_exports__);
       return console.error(err);
     });
     console.log("hello");
-    _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("http://127.0.0.1:8000/api/admin/clients").then(function (_ref3) {
-      var data = _ref3.data;
-      console.log(data);
-      that.items = data.data;
-      that.items.forEach(function (element) {
-        if (element.role === "admin") {
-          console.log(element.role);
-          that.items.splice(that.items.indexOf(element), 1);
-        }
-      });
-      console.log(that.items);
-    })["catch"](function (err) {
-      return console.error(err);
-    });
+    this.viewC();
   },
   methods: {
+    // view clients
+    viewC: function viewC() {
+      _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("http://127.0.0.1:8000/api/admin/clients").then(function (_ref3) {
+        var data = _ref3.data;
+        console.log(data);
+        that.items = data.data;
+        that.items.forEach(function (element) {
+          if (element.role === "admin") {
+            console.log(element.role);
+            that.items.splice(that.items.indexOf(element), 1);
+          }
+        });
+        console.log(that.items);
+      })["catch"](function (err) {
+        return console.error(err);
+      });
+    },
+    // save updated fields
     save: function save() {
+      var _this = this;
+
       var that = this;
       console.log(that.$route.params.id);
       _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].post("http://127.0.0.1:8000/api/admin/group/update/" + that.$route.params.id, {
@@ -2269,27 +2294,32 @@ __webpack_require__.r(__webpack_exports__);
         console.log("added");
       });
       that.user_ids.forEach(function (element) {
-        _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].post("http://127.0.0.1:8000/api/admin/usergroup/create", {
-          id_group: element,
-          id_user: that.group.id
-        }).then(function (response) {
-          console.log("added ids");
-        });
+        _this.addCG(element);
       });
       that.$router.push({
         path: "/admin/groups"
       });
     },
+    //add client to group
+    addCG: function addCG(element) {
+      _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].post("http://127.0.0.1:8000/api/admin/usergroup/create", {
+        id_group: element,
+        id_user: that.group.id
+      }).then(function (response) {
+        console.log("added ids");
+      });
+    },
+    // add id client to array
     addClient: function addClient() {
-      var _this = this;
+      var _this2 = this;
 
       this.user_ids.push(this.selected);
       console.log(this.user_ids);
       this.items.forEach(function (element) {
-        if (element.id === _this.selected) {
+        if (element.id === _this2.selected) {
           console.log(element.id);
 
-          _this.items.splice(_this.items.indexOf(element), 1);
+          _this2.items.splice(_this2.items.indexOf(element), 1);
         }
       });
       console.log(this.items);
@@ -2352,6 +2382,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2360,32 +2397,36 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    var that = this;
-    _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("http://127.0.0.1:8000/api/admin/clients").then(function (_ref) {
-      var data = _ref.data;
-      // console.log(data);
-      that.items = data.data;
-      that.items.forEach(function (element) {
-        if (element.role === "admin") {
-          console.log(element.role);
-          that.items.splice(that.items.indexOf(element), 1);
-        }
-      });
-      console.log(that.items);
-    })["catch"](function (err) {
-      return console.error(err);
-    });
-    console.log(localStorage.getItem("token"));
+    this.showC();
   },
   methods: {
-    deleteC: function deleteC(id, indexid) {
+    // show clients
+    showC: function showC() {
       var that = this;
-      console.log(indexid);
-      _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"]("http://127.0.0.1:8000/api/admin/client/delete/" + id).then(function (response) {
-        that.items.splice(indexid, 1);
+      _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("http://127.0.0.1:8000/api/admin/clients").then(function (_ref) {
+        var data = _ref.data;
+        // console.log(data);
+        that.items = data.data;
+        that.items.forEach(function (element) {
+          if (element.role === "admin") {
+            //console.log(element.role);
+            that.items.splice(that.items.indexOf(element), 1);
+          }
+        });
         console.log(that.items);
+      })["catch"](function (err) {
+        return console.error(err);
+      }); //console.log(localStorage.getItem("token"));
+    },
+    // delete client
+    deleteC: function deleteC(id, indexid) {
+      var that = this; //console.log(indexid);
+
+      _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"]("http://127.0.0.1:8000/api/admin/client/delete/" + id).then(function (response) {
+        that.items.splice(indexid, 1); // console.log(that.items);
       });
     },
+    //navigation to edit client page
     editC: function editC(id) {
       console.log(id);
       this.$router.push({
@@ -2393,6 +2434,12 @@ __webpack_require__.r(__webpack_exports__);
         params: {
           pid: id
         }
+      });
+    },
+    //navigation to add client page
+    addC_: function addC_() {
+      this.$router.push({
+        path: "/admin/addclient/"
       });
     }
   }
@@ -2459,16 +2506,21 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    var that = this;
-    _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("http://127.0.0.1:8000/api/admin/groups").then(function (_ref) {
-      var data = _ref.data;
-      console.log(data);
-      that.items = data.data; // console.log(that.items);
-    })["catch"](function (err) {
-      return console.error(err);
-    });
+    this.showG();
   },
   methods: {
+    // show groups
+    showG: function showG() {
+      var that = this;
+      _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("http://127.0.0.1:8000/api/admin/groups").then(function (_ref) {
+        var data = _ref.data;
+        console.log(data);
+        that.items = data.data; // console.log(that.items);
+      })["catch"](function (err) {
+        return console.error(err);
+      });
+    },
+    // delete group
     deleteG: function deleteG(id, indexi) {
       var that = this;
       _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"]("http://127.0.0.1:8000/api/admin/group/delete/" + id).then(function (response) {
@@ -2489,7 +2541,8 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
     },
-    viewG: function viewG(id) {
+    //navigation to edit group page
+    editG: function editG(id) {
       console.log(id);
       this.$router.push({
         path: "/admin/editgroup/" + id,
@@ -2498,7 +2551,8 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    addGroup: function addGroup() {
+    //navigation to add group page
+    addG: function addG() {
       this.$router.push({
         path: "/admin/addgroup"
       });
@@ -39653,7 +39707,24 @@ var render = function() {
                 ])
               ])
             ])
-          })
+          }),
+          _vm._v(" "),
+          _c("div", { staticClass: "table-row" }, [
+            _c("div", { staticClass: "table-data" }, [
+              _c(
+                "button",
+                {
+                  staticStyle: { width: "200px !important" },
+                  on: {
+                    click: function($event) {
+                      return _vm.addC_()
+                    }
+                  }
+                },
+                [_vm._v("\n            Add Client\n          ")]
+              )
+            ])
+          ])
         ],
         2
       )
@@ -39754,7 +39825,7 @@ var render = function() {
                       {
                         on: {
                           click: function($event) {
-                            return _vm.viewG(item.id)
+                            return _vm.editG(item.id)
                           }
                         }
                       },
@@ -39784,7 +39855,7 @@ var render = function() {
                     "button",
                     {
                       staticStyle: { width: "200px !important" },
-                      on: { click: _vm.addGroup }
+                      on: { click: _vm.addG }
                     },
                     [_vm._v("\n              Add Group\n            ")]
                   )
@@ -56064,8 +56135,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pages_EditClient_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pages/EditClient.vue */ "./resources/js/pages/EditClient.vue");
 /* harmony import */ var _pages_EditGroup_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pages/EditGroup.vue */ "./resources/js/pages/EditGroup.vue");
 /* harmony import */ var _pages_translate_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pages/translate.vue */ "./resources/js/pages/translate.vue");
-/* harmony import */ var _admin_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./admin.vue */ "./resources/js/admin.vue");
-
 
 
 

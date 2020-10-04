@@ -40,7 +40,9 @@ export default {
         })
         .then((response) => {
           console.log("added");
-          // window.location.href = "/admin/clients";
+            that.$router.push({
+        path: "/admin/Clients",
+      });
         });
     },
   },

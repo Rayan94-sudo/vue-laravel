@@ -21,19 +21,25 @@ export default {
     };
   },
   mounted() {
-    console.log(this.$route.params.id);
-    let that = this;
-    instance
-      .get("http://127.0.0.1:8000/api/admin/client/" + this.$route.params.id)
-      .then(({ data }) => {
-        console.log(data);
-        that.items = data.data;
-        console.log(that.items);
-      })
-      .catch((err) => console.error(err));
+    this.viewC();
   },
 
   methods: {
+    // view client to be edit
+    viewC() {
+      // console.log(this.$route.params.id);
+      let that = this;
+      instance
+        .get("http://127.0.0.1:8000/api/admin/client/" + this.$route.params.id)
+        .then(({ data }) => {
+          console.log(data);
+          that.items = data.data;
+          console.log(that.items);
+        })
+        .catch((err) => console.error(err));
+    },
+
+    //save updated fields
     save() {
       let that = this;
       instance

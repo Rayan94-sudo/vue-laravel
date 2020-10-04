@@ -5,7 +5,7 @@ import addgroup from './pages/AddGroup.vue';
 import editclient from './pages/EditClient.vue';
 import editgroup from './pages/EditGroup.vue';
 import translate from './pages/translate.vue';
-import admin from './admin.vue'
+
 export const routes = [
     {
         name: 'clients',

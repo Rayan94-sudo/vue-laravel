@@ -57,22 +57,29 @@ export default {
       })
       .catch((err) => console.error(err));
     console.log("hello");
-    instance
-      .get("http://127.0.0.1:8000/api/admin/clients")
-      .then(({ data }) => {
-        console.log(data);
-        that.items = data.data;
-        that.items.forEach((element) => {
-          if (element.role === "admin") {
-            console.log(element.role);
-            that.items.splice(that.items.indexOf(element), 1);
-          }
-        });
-        console.log(that.items);
-      })
-      .catch((err) => console.error(err));
+
+    this.viewC();
   },
   methods: {
+    // view clients
+    viewC() {
+      instance
+        .get("http://127.0.0.1:8000/api/admin/clients")
+        .then(({ data }) => {
+          console.log(data);
+          that.items = data.data;
+          that.items.forEach((element) => {
+            if (element.role === "admin") {
+              console.log(element.role);
+              that.items.splice(that.items.indexOf(element), 1);
+            }
+          });
+          console.log(that.items);
+        })
+        .catch((err) => console.error(err));
+    },
+
+    // save updated fields
     save() {
       let that = this;
       console.log(that.$route.params.id);
@@ -89,19 +96,26 @@ export default {
         });
 
       that.user_ids.forEach((element) => {
-        instance
-          .post("http://127.0.0.1:8000/api/admin/usergroup/create", {
-            id_group: element,
-            id_user: that.group.id,
-          })
-          .then((response) => {
-            console.log("added ids");
-          });
+        this.addCG(element);
       });
       that.$router.push({
         path: "/admin/groups",
       });
     },
+
+    //add client to group
+    addCG(element) {
+      instance
+        .post("http://127.0.0.1:8000/api/admin/usergroup/create", {
+          id_group: element,
+          id_user: that.group.id,
+        })
+        .then((response) => {
+          console.log("added ids");
+        });
+    },
+
+    // add id client to array
     addClient() {
       this.user_ids.push(this.selected);
       console.log(this.user_ids);
