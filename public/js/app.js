@@ -2247,18 +2247,19 @@ __webpack_require__.r(__webpack_exports__);
     this.viewC(); //console.log(this.$route.params.id);
 
     var that = this;
-    _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("http://127.0.0.1:8000/api/admin/group/" + this.$route.params.id).then(function (_ref) {
+    _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("http://127.0.0.1:8000/api/admin/group/clients/" + this.$route.params.id).then(function (_ref) {
       var data = _ref.data;
-      that.group = data.data;
-      _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("http://127.0.0.1:8000/api/admin/usergroup").then(function (response) {
-        that.usergroup_id = response.data.data;
-        that.usergroup_id.forEach(function (element) {
-          _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("http://127.0.0.1:8000/api/admin/client/" + element.id_user).then(function (_ref2) {
-            var data = _ref2.data;
-            that.Users_of_group.push(data.data);
-          });
-        });
-      });
+      console.log(data.data); // data.data.forEach((element) => {
+      //   that.Users_of_group.push(element);
+      // });
+
+      console.log(data.data.length);
+
+      for (var i = 0; i < data.data.length; i++) {
+        that.Users_of_group.push(data.data[i][0]);
+      }
+
+      console.log(that.Users_of_group);
     })["catch"](function (err) {
       return console.error(err);
     });
@@ -2269,8 +2270,8 @@ __webpack_require__.r(__webpack_exports__);
     viewC: function viewC() {
       var that = this;
       console.log("viewC");
-      _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("http://127.0.0.1:8000/api/admin/clients").then(function (_ref3) {
-        var data = _ref3.data;
+      _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("http://127.0.0.1:8000/api/admin/clients").then(function (_ref2) {
+        var data = _ref2.data;
         console.log(data);
         that.items = data.data;
         that.items.forEach(function (element) {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Groups;
+use App\Models\User;
 use App\Models\Group_User;
 use Illuminate\Http\Request;
 
@@ -154,4 +155,29 @@ class GroupController extends Controller
         }
     }
 
+     /**
+     *@return mixed 
+     */
+       /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    /**
+     *To show Users of group page in database  
+     */
+    public function showClient($id)
+    {
+       $group_user=Group_User::where('id_group', $id)->get();
+       $users=[];
+        foreach($group_user as $element){
+           $user=User::where('id',$element->id_user)->get();
+           array_push($users,$user);
+        }
+
+        return response()->json([
+            'data' => $users   
+        ]);
+    }
+
 }
+ 

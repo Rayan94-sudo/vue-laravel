@@ -38,23 +38,19 @@ export default {
     let that = this;
 
     instance
-      .get("http://127.0.0.1:8000/api/admin/group/" + this.$route.params.id)
+      .get(
+        "http://127.0.0.1:8000/api/admin/group/clients/" + this.$route.params.id
+      )
       .then(({ data }) => {
-        that.group = data.data;
-        instance
-          .get("http://127.0.0.1:8000/api/admin/usergroup")
-          .then((response) => {
-            that.usergroup_id = response.data.data;
-            that.usergroup_id.forEach((element) => {
-              instance
-                .get(
-                  "http://127.0.0.1:8000/api/admin/client/" + element.id_user
-                )
-                .then(({ data }) => {
-                  that.Users_of_group.push(data.data);
-                });
-            });
-          });
+        console.log(data.data);
+        // data.data.forEach((element) => {
+        //   that.Users_of_group.push(element);
+        // });
+        console.log(data.data.length);
+        for (let i = 0; i < data.data.length; i++) {
+          that.Users_of_group.push(data.data[i][0]);
+        }
+        console.log(that.Users_of_group);
       })
       .catch((err) => console.error(err));
     console.log("hello");

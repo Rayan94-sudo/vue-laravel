@@ -38,6 +38,7 @@ $router->group([
     Route::post('/group/update/{id}', [GroupController::class,"update"]);
     Route::post('/group/create', [GroupController::class,"store"]);
     Route::delete('/group/delete/{id}',[GroupController::class,"destroy"]);
+    Route::get('/group/clients/{id}', [GroupController::class,"showClient"]);
 
     Route::get('/clients', [ClientController::class,"index"]);
     Route::get('/client/{id}', [ClientController::class,"show"]);
@@ -45,10 +46,5 @@ $router->group([
     Route::post('/client/create', [ClientController::class,"store"]);
     Route::delete('/client/delete/{id}', [ClientController::class,"destroy"]);
 
-    Route::get('/usergroup', [Group_UserController::class,"index"]);
-    Route::get('/usergroup/{id}', [Group_UserController::class,"show"]);
-    Route::post('/usergroup/update/{id}',[Group_UserController::class,"update"]);
-    Route::post('/usergroup/create', [Group_UserController::class,"store"]);
-    Route::delete('/usergroup/delete/{id}', [Group_UserController::class,"destroy"]);
 
 });
