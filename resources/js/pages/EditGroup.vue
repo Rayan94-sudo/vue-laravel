@@ -33,6 +33,7 @@ export default {
     };
   },
   mounted() {
+    this.viewC();
     //console.log(this.$route.params.id);
     let that = this;
 
@@ -57,12 +58,13 @@ export default {
       })
       .catch((err) => console.error(err));
     console.log("hello");
-
-    this.viewC();
   },
   methods: {
     // view clients
     viewC() {
+      let that = this;
+
+      console.log("viewC");
       instance
         .get("http://127.0.0.1:8000/api/admin/clients")
         .then(({ data }) => {
@@ -83,36 +85,20 @@ export default {
     save() {
       let that = this;
       console.log(that.$route.params.id);
-      instance
-        .post(
+
+      that.user_ids.forEach((element) => {
+        instance.post(
           "http://127.0.0.1:8000/api/admin/group/update/" +
             that.$route.params.id,
           {
             name: that.group.name,
+            id_user: element,
           }
-        )
-        .then((response) => {
-          console.log("added");
-        });
-
-      that.user_ids.forEach((element) => {
-        this.addCG(element);
+        );
       });
       that.$router.push({
         path: "/admin/groups",
       });
-    },
-
-    //add client to group
-    addCG(element) {
-      instance
-        .post("http://127.0.0.1:8000/api/admin/usergroup/create", {
-          id_group: element,
-          id_user: that.group.id,
-        })
-        .then((response) => {
-          console.log("added ids");
-        });
     },
 
     // add id client to array

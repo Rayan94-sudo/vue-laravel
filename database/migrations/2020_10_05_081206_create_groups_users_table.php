@@ -15,8 +15,12 @@ class CreateGroupsUsersTable extends Migration
     {
         Schema::create('groups_users', function (Blueprint $table) {
             $table->id();
-            $table->integer('id_group');
-            $table->integer('id_user');
+            $table->unsignedBigInteger('id_group');
+            $table->foreign('id_group')->references('id')->on('groups')->onDelete('cascade');
+
+            $table->unsignedBigInteger('id_user');
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

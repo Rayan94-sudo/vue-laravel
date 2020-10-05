@@ -72,28 +72,6 @@ export default {
         .then((response) => {
           that.items.splice(indexi, 1);
           // console.log(that.items);
-
-          instance
-            .get("http://127.0.0.1:8000/api/admin/usergroup")
-            .then((response) => {
-              // console.log(response.data);
-
-              that.user_group = response.data.data;
-              //console.log(that.user_group);
-              that.user_group.forEach((element) => {
-                if (element.id_group == id) {
-                  console.log(element.id);
-                  axios
-                    .delete(
-                      "http://127.0.0.1:8000/api/admin/usergroup/delete/" +
-                        element.id
-                    )
-                    .then((response) => {
-                      console.log(response.data);
-                    });
-                }
-              });
-            });
         });
     },
 

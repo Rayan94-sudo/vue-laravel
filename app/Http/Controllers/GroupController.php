@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Groups;
+use App\Models\Group_User;
 use Illuminate\Http\Request;
 
 class GroupController extends Controller
@@ -99,9 +100,16 @@ class GroupController extends Controller
         }
 
     
-        $updated = $groups->fill($request->all())->save();
+        $updatedG = $groups->name=$request->name;
+        
+        $group_user = new Group_User();
+        $group_user->id_user= $request->id_user;
+        $group_user->id_group= $request->id;
+      
+        $group_user->save();
 
-        if ($updated) {
+
+        if ($updatedG) {
             return response()->json([
                 'success' => true,
                 'data' => $groups
@@ -124,6 +132,8 @@ class GroupController extends Controller
     public function destroy($id)
     {
         $groups = Groups::find($id);
+
+        Group_User::where('id_group', $id)->delete();
 
         if (!$groups) {
             return response()->json([

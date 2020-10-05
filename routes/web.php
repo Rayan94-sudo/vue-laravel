@@ -19,7 +19,7 @@ Route::get('/', function () {
 });
 
 $router->group([
-    'middleware' => ['admin'],
+    'middleware' => [],
 ], function($router){
 Route::get('/admin',function(){
     return view ('admin');

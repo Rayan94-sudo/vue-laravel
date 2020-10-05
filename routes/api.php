@@ -30,7 +30,7 @@ Route::group([
 // 3-->Add user to group
 
 $router->group([
-    'middleware' => ['auth:api','admin'],
+    'middleware' => [],
     'prefix' => 'admin'
 ], function($router){
     Route::get('/groups', [GroupController::class,"index"]);

@@ -2065,7 +2065,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    this.showClients;
+    this.showClients();
   },
   methods: {
     // show all clients in select options
@@ -2244,7 +2244,8 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    //console.log(this.$route.params.id);
+    this.viewC(); //console.log(this.$route.params.id);
+
     var that = this;
     _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("http://127.0.0.1:8000/api/admin/group/" + this.$route.params.id).then(function (_ref) {
       var data = _ref.data;
@@ -2262,11 +2263,12 @@ __webpack_require__.r(__webpack_exports__);
       return console.error(err);
     });
     console.log("hello");
-    this.viewC();
   },
   methods: {
     // view clients
     viewC: function viewC() {
+      var that = this;
+      console.log("viewC");
       _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("http://127.0.0.1:8000/api/admin/clients").then(function (_ref3) {
         var data = _ref3.data;
         console.log(data);
@@ -2284,42 +2286,29 @@ __webpack_require__.r(__webpack_exports__);
     },
     // save updated fields
     save: function save() {
-      var _this = this;
-
       var that = this;
       console.log(that.$route.params.id);
-      _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].post("http://127.0.0.1:8000/api/admin/group/update/" + that.$route.params.id, {
-        name: that.group.name
-      }).then(function (response) {
-        console.log("added");
-      });
       that.user_ids.forEach(function (element) {
-        _this.addCG(element);
+        _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].post("http://127.0.0.1:8000/api/admin/group/update/" + that.$route.params.id, {
+          name: that.group.name,
+          id_user: element
+        });
       });
       that.$router.push({
         path: "/admin/groups"
       });
     },
-    //add client to group
-    addCG: function addCG(element) {
-      _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].post("http://127.0.0.1:8000/api/admin/usergroup/create", {
-        id_group: element,
-        id_user: that.group.id
-      }).then(function (response) {
-        console.log("added ids");
-      });
-    },
     // add id client to array
     addClient: function addClient() {
-      var _this2 = this;
+      var _this = this;
 
       this.user_ids.push(this.selected);
       console.log(this.user_ids);
       this.items.forEach(function (element) {
-        if (element.id === _this2.selected) {
+        if (element.id === _this.selected) {
           console.log(element.id);
 
-          _this2.items.splice(_this2.items.indexOf(element), 1);
+          _this.items.splice(_this.items.indexOf(element), 1);
         }
       });
       console.log(this.items);
@@ -2525,20 +2514,6 @@ __webpack_require__.r(__webpack_exports__);
       var that = this;
       _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"]("http://127.0.0.1:8000/api/admin/group/delete/" + id).then(function (response) {
         that.items.splice(indexi, 1); // console.log(that.items);
-
-        _config_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("http://127.0.0.1:8000/api/admin/usergroup").then(function (response) {
-          // console.log(response.data);
-          that.user_group = response.data.data; //console.log(that.user_group);
-
-          that.user_group.forEach(function (element) {
-            if (element.id_group == id) {
-              console.log(element.id);
-              axios["delete"]("http://127.0.0.1:8000/api/admin/usergroup/delete/" + element.id).then(function (response) {
-                console.log(response.data);
-              });
-            }
-          });
-        });
       });
     },
     //navigation to edit group page
@@ -7023,10 +6998,10 @@ __webpack_require__.r(__webpack_exports__);
 
 exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
 // imports
-exports.push([module.i, "@import url(//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css);", ""]);
+exports.i(__webpack_require__(/*! -!../../../node_modules/css-loader!../style/Standarstyle.css */ "./node_modules/css-loader/index.js!./resources/js/style/Standarstyle.css"), "");
 
 // module
-exports.push([module.i, "h1,\ninput::-webkit-input-placeholder,\nbutton {\n  font-family: \"roboto\", sans-serif;\n  transition: all 0.3s ease-in-out;\n}\nh1 {\n  height: 70px;\n  width: 100%;\n  font-size: 28px;\n  background: black;\n  color: white;\n  line-height: 120%;\n  border-radius: 3px 3px 0 0;\n  box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);\n}\nform {\n  box-sizing: border-box;\n  width: 400px;\n  margin: 40px auto 0;\n  box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);\n  padding-bottom: 40px;\n  border-radius: 3px;\n}\nh1 {\n  box-sizing: border-box;\n  padding: 20px;\n}\ninput {\n  margin: 60px 25px;\n  width: 350px;\n  display: block;\n  border: none;\n  padding: 10px 0;\n  border-bottom: solid 1px black;\n  transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);\n  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 96%, black 4%);\n  background-position: -200px 0;\n  background-size: 200px 100%;\n  background-repeat: no-repeat;\n  color: black;\n}\ninput:focus,\ninput:valid {\n  box-shadow: none;\n  outline: none;\n  background-position: 0 0;\n}\ninput::-webkit-input-placeholder {\n  color: black;\n  font-size: 11px;\n  visibility: visible !important;\n}\nbutton {\n  border: none;\n  background: black;\n  cursor: pointer;\n  border-radius: 3px;\n  padding: 6px;\n  width: 350px;\n  height: 38px;\n  color: white;\n  margin-left: 25px;\n  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);\n}\nbutton:hover {\n  transform: translateY(-3px);\n  box-shadow: 0 6px 6px 0 rgba(0, 0, 0, 0.2);\n}\n.follow {\n  width: 42px;\n  height: 42px;\n  border-radius: 50px;\n  background: #03a9f4;\n  display: inline-block;\n  margin: 50px calc(50% - 21px);\n  white-space: nowrap;\n  padding: 13px;\n  box-sizing: border-box;\n  color: white;\n  transition: all 0.2s ease;\n  font-family: Roboto, sans-serif;\n  text-decoration: none;\n  box-shadow: 0 5px 6px 0 rgba(0, 0, 0, 0.2);\n}\n.follow:hover {\n  width: 134px;\n  transform: translateX(-50px);\n}", ""]);
+exports.push([module.i, "", ""]);
 
 // exports
 
@@ -7042,10 +7017,10 @@ exports.push([module.i, "h1,\ninput::-webkit-input-placeholder,\nbutton {\n  fon
 
 exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
 // imports
-exports.push([module.i, "@import url(//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css);", ""]);
+exports.i(__webpack_require__(/*! -!../../../node_modules/css-loader!../style/Standarstyle.css */ "./node_modules/css-loader/index.js!./resources/js/style/Standarstyle.css"), "");
 
 // module
-exports.push([module.i, "h1,\ninput::-webkit-input-placeholder,\nbutton {\n  font-family: \"roboto\", sans-serif;\n  transition: all 0.3s ease-in-out;\n}\n.container-select {\n  text-align: center;\n}\nh1 {\n  height: 70px;\n  width: 100%;\n  font-size: 28px;\n  background: black;\n  color: white;\n  line-height: 120%;\n  border-radius: 3px 3px 0 0;\n  box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);\n}\nform {\n  box-sizing: border-box;\n  width: 400px;\n  margin: 40px auto 0;\n  box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);\n  padding-bottom: 40px;\n  border-radius: 3px;\n}\nh1 {\n  box-sizing: border-box;\n  padding: 20px;\n}\ninput {\n  margin: 60px 25px;\n  width: 350px;\n  display: block;\n  border: none;\n  padding: 10px 0;\n  border-bottom: solid 1px black;\n  transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);\n  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 96%, black 4%);\n  background-position: -200px 0;\n  background-size: 200px 100%;\n  background-repeat: no-repeat;\n  color: black;\n}\ninput:focus,\ninput:valid {\n  box-shadow: none;\n  outline: none;\n  background-position: 0 0;\n}\ninput::-webkit-input-placeholder {\n  color: black;\n  font-size: 11px;\n  visibility: visible !important;\n}\nbutton {\n  border: none;\n  background: black;\n  cursor: pointer;\n  border-radius: 3px;\n  padding: 6px;\n  width: 350px;\n  height: 38px;\n  color: white;\n  margin-left: 25px;\n  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);\n}\nbutton:hover {\n  transform: translateY(-3px);\n  box-shadow: 0 6px 6px 0 rgba(0, 0, 0, 0.2);\n}\n.follow {\n  width: 42px;\n  height: 42px;\n  border-radius: 50px;\n  background: #03a9f4;\n  display: inline-block;\n  margin: 50px calc(50% - 21px);\n  white-space: nowrap;\n  padding: 13px;\n  box-sizing: border-box;\n  color: white;\n  transition: all 0.2s ease;\n  font-family: Roboto, sans-serif;\n  text-decoration: none;\n  box-shadow: 0 5px 6px 0 rgba(0, 0, 0, 0.2);\n}\n.follow:hover {\n  width: 134px;\n  transform: translateX(-50px);\n}", ""]);
+exports.push([module.i, ".container-select {\n  text-align: center;\n}\n.addButton {\n  width: 100px !important;\n  margin: 10px !important;\n}", ""]);
 
 // exports
 
@@ -7122,6 +7097,25 @@ exports.push([module.i, "@import url(https://fonts.googleapis.com/css?family=Sou
 
 // module
 exports.push([module.i, "*[data-v-7366467d],\n*[data-v-7366467d]:before,\n*[data-v-7366467d]:after {\n  box-sizing: border-box;\n}\nbody[data-v-7366467d] {\n  padding: 24px;\n  font-family: \"Source Sans Pro\", sans-serif;\n  margin: 0;\n}\nh1[data-v-7366467d],\nh2[data-v-7366467d],\nh3[data-v-7366467d],\nh4[data-v-7366467d],\nh5[data-v-7366467d],\nh6[data-v-7366467d] {\n  margin: 0;\n}\nbutton[data-v-7366467d] {\n  width: 50px !important;\n}\n.container[data-v-7366467d] {\n  max-width: 1000px;\n  margin-right: auto;\n  margin-left: auto;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  min-height: 100vh;\n}\n.table[data-v-7366467d] {\n  width: 100%;\n  border: 1px solid #eeeeee;\n}\n.table-header[data-v-7366467d] {\n  display: flex;\n  width: 100%;\n  background: #000;\n  padding: 18px 0;\n}\n.table-row[data-v-7366467d] {\n  display: flex;\n  width: 100%;\n  padding: 18px 0;\n}\n.table-row[data-v-7366467d]:nth-of-type(odd) {\n  background: #eeeeee;\n}\n.table-data[data-v-7366467d],\n.header__item[data-v-7366467d] {\n  flex: 1 1 20%;\n  text-align: center;\n}\n.header__item[data-v-7366467d] {\n  text-transform: uppercase;\n}\n.filter__link[data-v-7366467d] {\n  color: white;\n  text-decoration: none;\n  position: relative;\n  display: inline-block;\n  padding-left: 24px;\n  padding-right: 24px;\n}\n.filter__link[data-v-7366467d]::after {\n  content: \"\";\n  position: absolute;\n  right: -18px;\n  color: white;\n  font-size: 12px;\n  top: 50%;\n  transform: translateY(-50%);\n}\n.filter__link.desc[data-v-7366467d]::after {\n  content: \"(desc)\";\n}\n.filter__link.asc[data-v-7366467d]::after {\n  content: \"(asc)\";\n}", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./resources/js/style/Standarstyle.css":
+/*!***********************************************************************!*\
+  !*** ./node_modules/css-loader!./resources/js/style/Standarstyle.css ***!
+  \***********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+exports.push([module.i, "@import url(//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css);", ""]);
+
+// module
+exports.push([module.i, "h1,\r\ninput::-webkit-input-placeholder,\r\nbutton {\r\n  font-family: \"roboto\", sans-serif;\r\n  transition: all 0.3s ease-in-out;\r\n}\r\n\r\nh1 {\r\n  height: 70px;\r\n  width: 100%;\r\n  font-size: 28px;\r\n  background:black;\r\n  color: white;\r\n  line-height: 120%;\r\n  border-radius: 3px 3px 0 0;\r\n  box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);\r\n  box-sizing: border-box;\r\n  padding: 20px;\r\n}\r\n\r\n\r\nform {\r\n  box-sizing: border-box;\r\n  width: 400px;\r\n  margin: 40px auto 0;\r\n  box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);\r\n  padding-bottom: 40px;\r\n  border-radius: 3px;\r\n}\r\n\r\n\r\nbutton {\r\n  border: none;\r\n  background: black;\r\n  cursor: pointer;\r\n  border-radius: 3px;\r\n  padding: 6px;\r\n  width: 350px;\r\n  height: 38px;\r\n  color: white;\r\n  margin-left: 25px;\r\n  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);\r\n}\r\nbutton:hover {\r\n  transform: translateY(-3px);\r\n  box-shadow: 0 6px 6px 0 rgba(0, 0, 0, 0.2);\r\n}\r\n\r\n.follow {\r\n  width: 42px;\r\n  height: 42px;\r\n  border-radius: 50px;\r\n  background: #03a9f4;\r\n  display: inline-block;\r\n  margin: 50px calc(50% - 21px);\r\n  white-space: nowrap;\r\n  padding: 13px;\r\n  box-sizing: border-box;\r\n  color: white;\r\n  transition: all 0.2s ease;\r\n  font-family: Roboto, sans-serif;\r\n  text-decoration: none;\r\n  box-shadow: 0 5px 6px 0 rgba(0, 0, 0, 0.2);\r\n}\r\n.follow:hover {\r\n  width: 134px;\r\n  transform: translateX(-50px);\r\n}\r\n\r\ninput {\r\n  margin: 60px 25px;\r\n  width: 350px;\r\n  display: block;\r\n  border: none;\r\n  padding: 10px 0;\r\n  border-bottom: solid 1px black;\r\n  transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);\r\n  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 96%, black 4%);\r\n  background-position: -200px 0;\r\n  background-size: 200px 100%;\r\n  background-repeat: no-repeat;\r\n  color: darken(black, 20%);\r\n}\r\n\r\ninput:focus,\r\ninput:valid {\r\n  box-shadow: none;\r\n  outline: none;\r\n  background-position: 0 0;\r\n}\r\ninput::-webkit-input-placeholder {\r\n  color: black;\r\n  font-size: 11px;\r\n  visibility: visible !important;\r\n}\r\n", ""]);
 
 // exports
 
@@ -39376,7 +39370,7 @@ var render = function() {
       _c(
         "button",
         {
-          staticStyle: { width: "100px", margin: "10px" },
+          staticClass: "addButton",
           on: {
             click: function($event) {
               $event.preventDefault()

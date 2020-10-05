@@ -17,6 +17,7 @@ class AuthController extends Controller
      */
     public function signup(Request $request)
     {
+       
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|string|email|unique:users',
@@ -24,6 +25,7 @@ class AuthController extends Controller
             'active' => 'required|boolean',
             'role' => 'required|string',
         ]);
+        
         $user = new User([
             'name' => $request->name,
             'email' => $request->email,
