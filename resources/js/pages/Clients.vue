@@ -49,8 +49,10 @@
 </template>
 
 <script>
+import mixin from "../Mixins/mixin";
 import instance from "../config/axios";
 export default {
+  mixins: [mixin],
   data() {
     return {
       items: [],
@@ -64,7 +66,7 @@ export default {
     showC() {
       let that = this;
       instance
-        .get("http://127.0.0.1:8000/api/admin/clients")
+        .get(this.url + "admin/clients")
         .then(({ data }) => {
           // console.log(data);
           that.items = data.data;
@@ -85,7 +87,7 @@ export default {
       let that = this;
       //console.log(indexid);
       instance
-        .delete("http://127.0.0.1:8000/api/admin/client/delete/" + id)
+        .delete(this.url + "admin/client/delete/" + id)
         .then((response) => {
           that.items.splice(indexid, 1);
           // console.log(that.items);

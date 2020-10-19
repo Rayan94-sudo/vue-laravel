@@ -7,7 +7,7 @@ import VueSidebarMenu from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css';
 import admin from './admin'
 import axios from './config/axios.js'
-
+import store from './store/store'
 
 Vue.use(VueSidebarMenu);
 Vue.use(VueTableDynamic);
@@ -24,5 +24,6 @@ const app = new Vue({
     components: {
         "admin": admin
     },
-    router
+    router,
+    store
 });

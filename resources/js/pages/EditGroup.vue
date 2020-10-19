@@ -21,7 +21,9 @@
 </template>
 <script>
 import instance from "../config/axios";
+import mixin from "../Mixins/mixin";
 export default {
+  mixins: [mixin],
   data() {
     return {
       selected: "",
@@ -38,9 +40,7 @@ export default {
     let that = this;
 
     instance
-      .get(
-        "http://127.0.0.1:8000/api/admin/group/clients/" + this.$route.params.id
-      )
+      .get(this.url + "admin/group/clients/" + this.$route.params.id)
       .then(({ data }) => {
         console.log(data.data);
         // data.data.forEach((element) => {
@@ -62,7 +62,7 @@ export default {
 
       console.log("viewC");
       instance
-        .get("http://127.0.0.1:8000/api/admin/clients")
+        .get(this.url + "admin/clients")
         .then(({ data }) => {
           console.log(data);
           that.items = data.data;
@@ -84,8 +84,7 @@ export default {
 
       that.user_ids.forEach((element) => {
         instance.post(
-          "http://127.0.0.1:8000/api/admin/group/update/" +
-            that.$route.params.id,
+          this.url + "admin/group/update/" + that.$route.params.id,
           {
             name: that.group.name,
             id_user: element,

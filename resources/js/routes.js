@@ -5,7 +5,7 @@ import addgroup from './pages/AddGroup.vue';
 import editclient from './pages/EditClient.vue';
 import editgroup from './pages/EditGroup.vue';
 import translate from './pages/translate.vue';
-
+import vuetestcomponent from './pages/vuexTestComponent.vue'
 export const routes = [
     {
         name: 'clients',
@@ -42,6 +42,10 @@ export const routes = [
         path: '/admin/translate',
         component: translate
     },
-
+    {
+        name: 'VuexTest',
+        path: '/admin/vuextest',
+        component: vuetestcomponent
+    },
 
 ];

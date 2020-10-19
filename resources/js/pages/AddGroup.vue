@@ -19,7 +19,9 @@
 </template>
 <script>
 import instance from "../config/axios";
+import mixin from "../Mixins/mixin";
 export default {
+  mixins: [mixin],
   data() {
     return {
       name: "",
@@ -37,7 +39,7 @@ export default {
     showClients() {
       let that = this;
       instance
-        .get("http://127.0.0.1:8000/api/admin/clients")
+        .get(this.url + "admin/clients")
         .then(({ data }) => {
           // console.log(data);
           that.items = data.data;
@@ -56,7 +58,7 @@ export default {
     save() {
       let that = this;
       instance
-        .post("http://127.0.0.1:8000/api/admin/group/create", {
+        .post(this.url + "admin/group/create", {
           name: that.name,
         })
         .then((response) => {
@@ -74,7 +76,7 @@ export default {
     // add clients to group
     addCG(element) {
       axios
-        .post("http://127.0.0.1:8000/api/admin/usergroup/create", {
+        .post(this.url + "admin/usergroup/create", {
           id_group: that.id_group,
           id_user: element,
         })

@@ -13,7 +13,9 @@
 </template>
 <script>
 import instance from "../config/axios";
+import mixin from "../Mixins/mixin";
 export default {
+  mixins: [mixin],
   data() {
     return {
       items: [],
@@ -30,7 +32,7 @@ export default {
       // console.log(this.$route.params.id);
       let that = this;
       instance
-        .get("http://127.0.0.1:8000/api/admin/client/" + this.$route.params.id)
+        .get(this.url + "admin/client/" + this.$route.params.id)
         .then(({ data }) => {
           console.log(data);
           that.items = data.data;
@@ -43,16 +45,13 @@ export default {
     save() {
       let that = this;
       instance
-        .post(
-          "http://127.0.0.1:8000/api/admin/client/update/" + that.items.id,
-          {
-            name: that.items.name,
-            email: that.items.email,
-            password: that.items.password,
-            role: that.items.role,
-            active: that.items.active,
-          }
-        )
+        .post(this.url + "admin/client/update/" + that.items.id, {
+          name: that.items.name,
+          email: that.items.email,
+          password: that.items.password,
+          role: that.items.role,
+          active: that.items.active,
+        })
         .then((response) => {
           console.log("edit");
         });

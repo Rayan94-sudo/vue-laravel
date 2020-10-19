@@ -18,7 +18,9 @@
 </template>
 <script>
 import instance from "../config/axios";
+import mixin from "../Mixins/mixin";
 export default {
+  mixins: [mixin],
   data() {
     return {
       name: "",
@@ -31,7 +33,7 @@ export default {
   methods: {
     addClient() {
       instance
-        .post("http://127.0.0.1:8000/api/admin/client/create", {
+        .post(this.url + "admin/client/create", {
           name: this.name,
           email: this.email,
           password: this.password,
